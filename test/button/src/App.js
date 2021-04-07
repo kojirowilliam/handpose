@@ -1,5 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react';
+import {Button, Container} from 'reactstrap';
+
+import ButtonViewer from './ButtonViewer';
+import ButtonEditor from './ButtonEditor';
+
+class App extends Components {
+  state = {
+    editing : null,
+  }
+
+  render() {
+    const {editing} = this.state;
+
+    return (
+      <Container fluid>
+        <Button
+
+    )
+  }
+}
 
 function App() {
   return (
