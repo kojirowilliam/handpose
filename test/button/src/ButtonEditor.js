@@ -25,7 +25,7 @@ const SUBMIT_BUTTON = gql`
 
 const ButtonEditor = ({button, onClose}) => (
   <FinalForm
-    onSubmit={async ({id, time})} => {
+    onSubmit={async ({id, time}) => {
       const input = {id, time};
       await client.mutate({
         variables: {input},
