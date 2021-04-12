@@ -23,6 +23,7 @@ const schema = buildASTSchema(gql`
 
   type Mutation {
     submitButton(input: ButtonInput!): Button
+    
   }
 
   input ButtonInput {

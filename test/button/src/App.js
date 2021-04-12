@@ -25,22 +25,33 @@ class App extends Component {
     const {editing} = this.state;
     async function submitbutton(props) {
       const current_time = new Date;
-      const input = {id : 0, time : current_time.toString()}
+      const input = {time : current_time.toString()}
+      console.log("Inside of Function BEFORE client.mutate")
       await client.mutate({
         variables: {input},
         mutation: SUBMIT_BUTTON,
-        refethQueries: () => [{ query: GET_BUTTONS}],
+        refetchQueries: () => [{ query: GET_BUTTONS}],
       })
+      console.log("Inside of Function AFTER client.mutate")
     }
     return (
       <Container fluid>
         <Button
         className="my-2"
         color="primary"
-        onClick={()=>this.submitbutton}
+        onClick={submitbutton}
         >
         Button
         </Button>
+        
+        // <Button
+        // className="my-3"
+        // color="primary"
+        // onClick={clearsubmitions}
+        // >
+        // Clear
+        // </Button>
+
         <ButtonViewer
         canEdit={()=>true}
         onEdit={(button) => this.setState({editing:button})}

@@ -30,7 +30,7 @@ const ButtonEditor = ({button, onClose}) => (
       await client.mutate({
         variables: {input},
         mutation: SUBMIT_BUTTON,
-        refethQueries: () => [{ query: GET_BUTTONS}],
+        refetchQueries: () => [{ query: GET_BUTTONS}],
       });
 
       onClose();
