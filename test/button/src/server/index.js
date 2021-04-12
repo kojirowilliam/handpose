@@ -19,11 +19,38 @@ const schema = buildASTSchema(gql`
   type Button {
     id: ID
     time: String
+    gesture: String
+    landmarks: [Landmark]
+  }
+
+  type Landmark {
+    handInViewConfidence: Float
+    zero: [String]
+    one: [String]
+    two: [String]
+    three: [String]
+    four: [String]
+    five: [String]
+    six: [String]
+    seven: [String]
+    eight: [String]
+    nine: [String]
+    ten: [String]
+    eleven: [String]
+    twelve: [String]
+    thirteen: [String]
+    fourteen: [String]
+    fifteen: [String]
+    sixteen: [String]
+    seventeen: [String]
+    eighteen: [String]
+    nineteen: [String]
+    twenty: [String]
   }
 
   type Mutation {
     submitButton(input: ButtonInput!): Button
-    
+
   }
 
   input ButtonInput {

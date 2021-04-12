@@ -1,4 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component, useRef} from 'react';
+import * as tf from "@tensorflow/tfjs";
+import * as handpose from "@tensorflow-models/handpose";
+import Webcam from "react-webcam";
 import {Button, Container} from 'reactstrap';
 
 import ButtonViewer from './ButtonViewer';
@@ -6,6 +9,8 @@ import ButtonEditor from './ButtonEditor';
 import {GET_BUTTONS} from './ButtonViewer';
 import gql from 'graphql-tag';
 import client from './apollo';
+
+import {drawHand} from "./utilities";
 
 
 const SUBMIT_BUTTON = gql`
@@ -17,46 +22,123 @@ const SUBMIT_BUTTON = gql`
 `;
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.webcamRef = React.createRef();
+    this.canvasRef = React.createRef();
+    this.net = handpose.load();
+    console.log("Handpose model loaded.");
+  }
   state = {
     editing : null,
   }
 
   render() {
+    const sleep = (milliseconds) => {
+      return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+
+    const runHandpose = async () =>{
+      // Loop and detect hands
+      await sleep(1000)
+      setInterval(()=>{
+        detect()
+      }, 100)
+    };
+    const detect = async () =>{
+      if(
+        typeof this.webcamRef.current !=="undefined" &&
+        this.webcamRef.current !== null &&
+        this.webcamRef.current.video.readyState === 4
+      ){
+
+        const video = this.webcamRef.current.video;
+        const videoWidth = this.webcamRef.current.video.videoWidth;
+        const videoHeight = this.webcamRef.current.video.videoHeight;
+
+        this.webcamRef.current.video.width = videoWidth;
+        this.webcamRef.current.video.height = videoHeight;
+
+        this.canvasRef.current.width = videoWidth;
+        this.canvasRef.current.height = videoHeight;
+
+        // Make Detection
+        const hand = await this.net.estimateHands(video);
+        if (typeof hand[0] !== "undefined") {
+          console.log(hand[0]);
+        }
+        const ctx = this.canvasRef.current.getContext("2d");
+        drawHand(hand, ctx);
+    }
+  };
+
     const {editing} = this.state;
     async function submitbutton(props) {
+      console.log(this.net);
+      const hand = await this.net.estimateHands(video);
+      if (typeof hand[0] !== "undefined") {
+        console.log(hand[0]);
+      }
+      const video = this.webcamRef.current.video;
       const current_time = new Date;
-      const input = {time : current_time.toString()}
-      console.log("Inside of Function BEFORE client.mutate")
+      const gesture = "open_palm";
+      const current_landmarks = {handInViewConfidence: hand.handInViewConfidence}
+      const input = {time : current_time.toString(), landmarks: current_landmarks}
       await client.mutate({
         variables: {input},
         mutation: SUBMIT_BUTTON,
         refetchQueries: () => [{ query: GET_BUTTONS}],
       })
-      console.log("Inside of Function AFTER client.mutate")
     }
-    return (
-      <Container fluid>
-        <Button
-        className="my-2"
-        color="primary"
-        onClick={submitbutton}
-        >
-        Button
-        </Button>
-        
-        // <Button
-        // className="my-3"
-        // color="primary"
-        // onClick={clearsubmitions}
-        // >
-        // Clear
-        // </Button>
 
-        <ButtonViewer
-        canEdit={()=>true}
-        onEdit={(button) => this.setState({editing:button})}
-        />
-        </Container>
+    runHandpose();
+
+    return (
+      <div className="App">
+        <header className="App-header">
+          <Webcam ref={this.webcamRef}
+            style ={{
+              position:"absolute",
+              marginLeft: "auto",
+              marginRight: "auto",
+              left: 0,
+              right: 0,
+              textAlign: "center",
+              zindex: 9,
+              width:640,
+              height: 480,
+            }}
+            />
+            <canvas
+            ref={this.canvasRef}
+            style={{
+              position: "absolute",
+              marginLeft: "auto",
+              marginRight: "auto",
+              left: 0,
+              right: 0,
+              textAlign: "center",
+              zindex: 9,
+              width: 640,
+              height: 480,
+            }}
+            />
+          <Container fluid>
+            <Button
+            className="my-2"
+            color="primary"
+            onClick={submitbutton}
+            >
+            Button
+            </Button>
+
+            <ButtonViewer
+            canEdit={()=>true}
+            onEdit={(button) => this.setState({editing:button})}
+            />
+            </Container>
+          </header>
+      </div>
     );
   }
 }
