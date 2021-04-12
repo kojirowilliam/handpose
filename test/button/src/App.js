@@ -26,11 +26,10 @@ class App extends Component {
     super(props);
     this.webcamRef = React.createRef();
     this.canvasRef = React.createRef();
-    this.net = handpose.load();
-    console.log("Handpose model loaded.");
   }
   state = {
     editing : null,
+    hand: null,
   }
 
   render() {
@@ -40,12 +39,13 @@ class App extends Component {
 
     const runHandpose = async () =>{
       // Loop and detect hands
-      await sleep(1000)
+      const net = await handpose.load();
+      console.log("Handpose model loaded.");
       setInterval(()=>{
-        detect()
+        detect(net)
       }, 100)
     };
-    const detect = async () =>{
+    const detect = async (net) =>{
       if(
         typeof this.webcamRef.current !=="undefined" &&
         this.webcamRef.current !== null &&
@@ -63,26 +63,24 @@ class App extends Component {
         this.canvasRef.current.height = videoHeight;
 
         // Make Detection
-        const hand = await this.net.estimateHands(video);
+        const hand = await net.estimateHands(video);
         if (typeof hand[0] !== "undefined") {
-          console.log(hand[0]);
+          // console.log(hand[0]);
         }
         const ctx = this.canvasRef.current.getContext("2d");
         drawHand(hand, ctx);
+        this.setState({
+          hand: hand
+        });
     }
   };
 
     const {editing} = this.state;
     async function submitbutton(props) {
-      console.log(this.net);
-      const hand = await this.net.estimateHands(video);
-      if (typeof hand[0] !== "undefined") {
-        console.log(hand[0]);
-      }
-      const video = this.webcamRef.current.video;
+      console.log(this.state.hand);
       const current_time = new Date;
       const gesture = "open_palm";
-      const current_landmarks = {handInViewConfidence: hand.handInViewConfidence}
+      const current_landmarks = {handInViewConfidence: this.hand.handInViewConfidence}
       const input = {time : current_time.toString(), landmarks: current_landmarks}
       await client.mutate({
         variables: {input},
