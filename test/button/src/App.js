@@ -26,6 +26,7 @@ class App extends Component {
     super(props);
     this.webcamRef = React.createRef();
     this.canvasRef = React.createRef();
+    this.handData = null;
   }
   state = {
     editing : null,
@@ -69,15 +70,13 @@ class App extends Component {
         }
         const ctx = this.canvasRef.current.getContext("2d");
         drawHand(hand, ctx);
-        this.setState({
-          hand: hand
-        });
     }
   };
 
     const {editing} = this.state;
     async function submitbutton(props) {
-      console.log(this.state.hand);
+      console.log(this.props);
+      console.log(props)
       const current_time = new Date;
       const gesture = "open_palm";
       const current_landmarks = {handInViewConfidence: this.hand.handInViewConfidence}
