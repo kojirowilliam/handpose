@@ -27,10 +27,10 @@ class App extends Component {
     this.webcamRef = React.createRef();
     this.canvasRef = React.createRef();
     this.handData = null;
-  }
-  state = {
-    editing : null,
-    hand: null,
+    this.state = {
+      editing : null,
+      hand: null,
+    }
   }
 
   render() {
@@ -66,7 +66,10 @@ class App extends Component {
         // Make Detection
         const hand = await net.estimateHands(video);
         if (typeof hand[0] !== "undefined") {
-          // console.log(hand[0]);
+          console.log(this.state.hand);
+          this.setState({hand: hand})
+          console.log(this.state.hand);
+          document.getElementById("current_hand").innerHTML = this.state.hand[0].handInViewConfidence;
         }
         const ctx = this.canvasRef.current.getContext("2d");
         drawHand(hand, ctx);
@@ -75,10 +78,10 @@ class App extends Component {
 
     const {editing} = this.state;
     async function submitbutton(props) {
-      console.log(this.props);
       console.log(props)
       const current_time = new Date;
       const gesture = "open_palm";
+      console.log(this.hand)
       const current_landmarks = {handInViewConfidence: this.hand.handInViewConfidence}
       const input = {time : current_time.toString(), landmarks: current_landmarks}
       await client.mutate({
@@ -86,6 +89,12 @@ class App extends Component {
         mutation: SUBMIT_BUTTON,
         refetchQueries: () => [{ query: GET_BUTTONS}],
       })
+    }
+
+    async function test(props) {
+      console.log(this.state);
+      console.log(this.state.hand);
+      document.getElementById("test_id").innerHTML = this.state.hand[0].handInViewConfidence;
     }
 
     runHandpose();
@@ -128,12 +137,20 @@ class App extends Component {
             >
             Button
             </Button>
+            <label id="current_hand"> </label>
+            <Button
+            onClick={test}
+            >
+            test
+            </Button>
+            <label id="test_id"> </label>
 
             <ButtonViewer
             canEdit={()=>true}
             onEdit={(button) => this.setState({editing:button})}
             />
             </Container>
+
           </header>
       </div>
     );
