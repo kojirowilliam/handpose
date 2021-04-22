@@ -51,16 +51,16 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Webcam ref={webcamRef}
+        <Webcam ref={webcamRef} videoConstraints = {{deviceId: "ed605918acc7be9f3a3e769862a15a4c803f4b39d03a172f78d2dbc549da5172"}}
         style ={{
-          position:"absolute",
+          position: "absolute",
           marginLeft: "auto",
           marginRight: "auto",
           left: 0,
           right: 0,
           textAlign: "center",
           zindex: 9,
-          width:640,
+          width: 640,
           height: 480,
         }}
         />

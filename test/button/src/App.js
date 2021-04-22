@@ -26,10 +26,10 @@ class App extends Component {
     super(props);
     this.webcamRef = React.createRef();
     this.canvasRef = React.createRef();
-    this.handData = null;
     this.state = {
       editing : null,
-      hand: null,
+      handConfidence: null,
+      handData: [],
     }
   }
 
@@ -65,11 +65,19 @@ class App extends Component {
 
         // Make Detection
         const hand = await net.estimateHands(video);
+
         if (typeof hand[0] !== "undefined") {
-          console.log(this.state.hand);
-          this.setState({hand: hand})
-          console.log(this.state.hand);
-          document.getElementById("current_hand").innerHTML = this.state.hand[0].handInViewConfidence;
+          console.log(this.state.handData);
+          console.log(hand[0])
+          this.setState({
+            handConfidence: hand[0].handInViewConfidence,
+            handData: hand[0]});
+          // document.getElementById("current_hand").innerHTML = this.state.handConfidence;
+
+          console.log(this.state.handData);
+          // this.setState({hand: hand})
+          // console.log(this.state.hand);
+          // document.getElementById("current_hand").innerHTML = this.state.hand[0].handInViewConfidence;
         }
         const ctx = this.canvasRef.current.getContext("2d");
         drawHand(hand, ctx);
@@ -93,8 +101,8 @@ class App extends Component {
 
     async function test(props) {
       console.log(this.state);
-      console.log(this.state.hand);
-      document.getElementById("test_id").innerHTML = this.state.hand[0].handInViewConfidence;
+      console.log(this.state.handConfidence);
+      document.getElementById("test_id").innerHTML = this.state.handData.handInViewConfidence;
     }
 
     runHandpose();
@@ -102,7 +110,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <Webcam ref={this.webcamRef}
+        <Webcam ref={this.webcamRef} audio={false} videoConstraints={{ deviceId: "ed605918acc7be9f3a3e769862a15a4c803f4b39d03a172f78d2dbc549da5172"}}
             style ={{
               position:"absolute",
               marginLeft: "auto",
@@ -111,8 +119,8 @@ class App extends Component {
               right: 0,
               textAlign: "center",
               zindex: 9,
-              width:640,
-              height: 480,
+              width:320,
+              height: 240,
             }}
             />
             <canvas
@@ -125,8 +133,8 @@ class App extends Component {
               right: 0,
               textAlign: "center",
               zindex: 9,
-              width: 640,
-              height: 480,
+              width: 320,
+              height: 240,
             }}
             />
           <Container fluid>
@@ -137,7 +145,7 @@ class App extends Component {
             >
             Button
             </Button>
-            <label id="current_hand"> </label>
+            <label id="current_hand">{this.state.handData}</label>
             <Button
             onClick={test}
             >
