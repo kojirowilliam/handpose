@@ -94,7 +94,6 @@ class App extends Component {
           document.getElementById("ring1").innerHTML = hand[0].annotations.ringFinger[1];
           document.getElementById("ring2").innerHTML = hand[0].annotations.ringFinger[2];
           document.getElementById("ring3").innerHTML = hand[0].annotations.ringFinger[3];
-          console.log(hand[0].annotations.pinky[0]);
           document.getElementById("pinky0").innerHTML = hand[0].annotations.pinky[0];
           document.getElementById("pinky1").innerHTML = hand[0].annotations.pinky[1];
           document.getElementById("pinky2").innerHTML = hand[0].annotations.pinky[2];
@@ -104,7 +103,6 @@ class App extends Component {
           document.getElementById("thumb2").innerHTML = hand[0].annotations.thumb[2];
           document.getElementById("thumb3").innerHTML = hand[0].annotations.thumb[3];
           document.getElementById("palm_base").innerHTML = hand[0].annotations.palmBase[0];
-          console.log(document.getElementById("thumb3").innerHTML);
         }
         const ctx = this.canvasRef.current.getContext("2d");
         drawHand(hand, ctx);
@@ -122,27 +120,27 @@ class App extends Component {
       // const pinky = [document.getElementById("pinky0").innerHTML, document.getElementById("pinky1").innerHTML, document.getElementById("pinky2").innerHTML, document.getElementById("pinky3").innerHTML];
       // const thumb = [document.getElementById("thumb0").innerHTML, document.getElementById("thumb1").innerHTML, document.getElementById("thumb2").innerHTML, document.getElementById("thumb3").innerHTML];
       // const palm_base = document.getElementById("palm_base").innerHTML;
-      const zero = document.getElementById("palm_base").innerHTML;
-      const one = document.getElementById("index0").innerHTML;
-      const two = document.getElementById("index1").innerHTML;
-      const three = document.getElementById("index2").innerHTML;
-      const four = document.getElementById("index3").innerHTML;
-      const five = document.getElementById("middle0").innerHTML;
-      const six = document.getElementById("middle1").innerHTML;
-      const seven = document.getElementById("middle2").innerHTML;
-      const eight = document.getElementById("middle3").innerHTML;
-      const nine = document.getElementById("ring0").innerHTML;
-      const ten = document.getElementById("ring1").innerHTML;
-      const eleven = document.getElementById("ring2").innerHTML;
-      const twelve = document.getElementById("ring3").innerHTML;
-      const thirteen = document.getElementById("pinky0").innerHTML;
-      const fourteen = document.getElementById("pinky1").innerHTML;
-      const fifteen = document.getElementById("pinky2").innerHTML;
-      const sixteen = document.getElementById("pinky3").innerHTML;
-      const seventeen = document.getElementById("thumb0").innerHTML;
-      const eighteen = document.getElementById("thumb1").innerHTML;
-      const nineteen = document.getElementById("thumb2").innerHTML;
-      const twenty = document.getElementById("thumb3").innerHTML;
+      const zero = document.getElementById("palm_base").innerHTML.split(",");
+      const one = document.getElementById("index0").innerHTML.split(",");
+      const two = document.getElementById("index1").innerHTML.split(",");
+      const three = document.getElementById("index2").innerHTML.split(",");
+      const four = document.getElementById("index3").innerHTML.split(",");
+      const five = document.getElementById("middle0").innerHTML.split(",");
+      const six = document.getElementById("middle1").innerHTML.split(",");
+      const seven = document.getElementById("middle2").innerHTML.split(",");
+      const eight = document.getElementById("middle3").innerHTML.split(",");
+      const nine = document.getElementById("ring0").innerHTML.split(",");
+      const ten = document.getElementById("ring1").innerHTML.split(",");
+      const eleven = document.getElementById("ring2").innerHTML.split(",");
+      const twelve = document.getElementById("ring3").innerHTML.split(",");
+      const thirteen = document.getElementById("pinky0").innerHTML.split(",");
+      const fourteen = document.getElementById("pinky1").innerHTML.split(",");
+      const fifteen = document.getElementById("pinky2").innerHTML.split(",");
+      const sixteen = document.getElementById("pinky3").innerHTML.split(",");
+      const seventeen = document.getElementById("thumb0").innerHTML.split(",");
+      const eighteen = document.getElementById("thumb1").innerHTML.split(",");
+      const nineteen = document.getElementById("thumb2").innerHTML.split(",");
+      const twenty = document.getElementById("thumb3").innerHTML.split(",");
 
       const current_landmarks = {handInViewConfidence: confidence, zero: zero, one: one, two: two, three: three, four: four, five: five, six: six, seven: seven, eight: eight, nine: nine, ten: ten, eleven: eleven, twelve: twelve, thirteen: thirteen, fourteen: fourteen, fifteen: fifteen, sixteen: sixteen, seventeen: seventeen, eighteen: eighteen, nineteen: nineteen, twenty: twenty};
       const input = {time : current_time.toString(), landmarks: current_landmarks};
@@ -154,7 +152,18 @@ class App extends Component {
     }
 
     async function test(props) {
-      document.getElementById("test_id").innerHTML = document.getElementById("hand_confidence_title").innerHTML;
+      const current_time = new Date;
+      // const confidence = document.getElementById("hand_confidence_title").innerHTML;
+      // const current_landmarks = {handInViewConfidence: confidence};
+      const input = {time : current_time.toString()};
+      await client.mutate({
+        variables: {input},
+        mutation: SUBMIT_BUTTON,
+        refetchQueries: () => [{ query: GET_BUTTONS}],
+      })
+      // console.log([document.getElementById("ring0").innerHTML][0]);
+      // const lis = document.getElementById("ring0").innerHTML.split(",");
+      // document.getElementById("test_id").innerHTML = lis[2];
     }
 
     runHandpose();
