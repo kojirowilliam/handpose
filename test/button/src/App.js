@@ -103,6 +103,105 @@ class App extends Component {
           document.getElementById("thumb2").innerHTML = hand[0].annotations.thumb[2];
           document.getElementById("thumb3").innerHTML = hand[0].annotations.thumb[3];
           document.getElementById("palm_base").innerHTML = hand[0].annotations.palmBase[0];
+
+          const palm_base = document.getElementById("palm_base").innerHTML.split(",");
+          const index0 = document.getElementById("index0").innerHTML.split(",");
+          const index1 = document.getElementById("index1").innerHTML.split(",");
+          const index2 = document.getElementById("index2").innerHTML.split(",");
+          const index3 = document.getElementById("index3").innerHTML.split(",");
+          const middle0 = document.getElementById("middle0").innerHTML.split(",");
+          const middle1 = document.getElementById("middle1").innerHTML.split(",");
+          const middle2 = document.getElementById("middle2").innerHTML.split(",");
+          const middle3 = document.getElementById("middle3").innerHTML.split(",");
+          const ring0 = document.getElementById("ring0").innerHTML.split(",");
+          const ring1 = document.getElementById("ring1").innerHTML.split(",");
+          const ring2 = document.getElementById("ring2").innerHTML.split(",");
+          const ring3 = document.getElementById("ring3").innerHTML.split(",");
+          const pinky0 = document.getElementById("pinky0").innerHTML.split(",");
+          const pinky1 = document.getElementById("pinky1").innerHTML.split(",");
+          const pinky2 = document.getElementById("pinky2").innerHTML.split(",");
+          const pinky3 = document.getElementById("pinky3").innerHTML.split(",");
+          const thumb0 = document.getElementById("thumb0").innerHTML.split(",");
+          const thumb1 = document.getElementById("thumb1").innerHTML.split(",");
+          const thumb2 = document.getElementById("thumb2").innerHTML.split(",");
+          const thumb3 = document.getElementById("thumb3").innerHTML.split(",");
+
+          // bv stand for base value
+          var euclidean_score = 0;
+
+          const index0_bv = [-61.26339126,141.4655587, 5.472402543]
+          const index1_bv = [-74.34763685,191.3315684, 8.723541707]
+          const index2_bv = [-80.34580778,228.962814,12.22445914]
+          const index3_bv = [-84.17808771,261.2174304,15.12117431]
+          const middle0_bv = [-23.89210165,148.3105319,5.413627118]
+          const middle1_bv = [-26.81526315,206.5770483,8.301603764]
+          const middle2_bv = [-28.77805404,250.2371139,12.79834697]
+          const middle3_bv = [-29.62159018,284.901491,-16.03917548]
+          const ring0_bv = [ 10.45937905, 142.0550588, 7.065842122]
+          const ring1_bv = [ 17.29190321, 196.6113173, 10.54424426]
+          const ring2_bv = [ 19.59283235, 238.1213407, 14.36407039]
+          const ring3_bv = [ 20.24271828, 271.0251258, 16.86407706]
+          const pinky0_bv = [ 43.36242166, 123.758792, 10.09051558]
+          const pinky1_bv = [ 59.45367901, 166.8725556, 13.95013377]
+          const pinky2_bv = [ 66.7828045, 199.4361493, 16.66569373]
+          const pinky3_bv = [ 71.03398137, 230.6004986, 18.31777999]
+          const thumb0_bv = [-55.72536208, 20.5417742, 10.3399491]
+          const thumb1_bv = [ -95.71247384, 59.94203511, 15.13371608]
+          const thumb2_bv = [ -116.7848137, 98.30049036, 19.49668548]
+          const thumb3_bv = [ -127.1697617, 126.7908667, 23.19322059]
+
+          const index0_value = [palm_base[0] - index0[0], palm_base[1] - index0[1], palm_base[2] - index0[2]]
+          const index1_value = [palm_base[0] - index1[0], palm_base[1] - index1[1], palm_base[2] - index1[2]]
+          const index2_value = [palm_base[0] - index2[0], palm_base[1] - index2[1], palm_base[2] - index2[2]]
+          const index3_value = [palm_base[0] - index3[0], palm_base[1] - index3[1], palm_base[2] - index3[2]]
+          const middle0_value = [palm_base[0] - middle0[0], palm_base[1] - middle0[1], palm_base[2] - middle0[2]]
+          const middle1_value = [palm_base[0] - middle1[0], palm_base[1] - middle1[1], palm_base[2] - middle1[2]]
+          const middle2_value = [palm_base[0] - middle2[0], palm_base[1] - middle2[1], palm_base[2] - middle2[2]]
+          const middle3_value = [palm_base[0] - middle3[0], palm_base[1] - middle3[1], palm_base[2] - middle3[2]]
+          const ring0_value = [palm_base[0] - ring0[0], palm_base[1] - ring0[1], palm_base[2] - ring0[2]]
+          const ring1_value = [palm_base[0] - ring1[0], palm_base[1] - ring1[1], palm_base[2] - ring1[2]]
+          const ring2_value = [palm_base[0] - ring2[0], palm_base[1] - ring2[1], palm_base[2] - ring2[2]]
+          const ring3_value = [palm_base[0] - ring3[0], palm_base[1] - ring3[1], palm_base[2] - ring3[2]]
+          const pinky0_value = [palm_base[0] - pinky0[0], palm_base[1] - pinky0[1], palm_base[2] - pinky0[2]]
+          const pinky1_value = [palm_base[0] - pinky1[0], palm_base[1] - pinky1[1], palm_base[2] - pinky1[2]]
+          const pinky2_value = [palm_base[0] - pinky2[0], palm_base[1] - pinky2[1], palm_base[2] - pinky2[2]]
+          const pinky3_value = [palm_base[0] - pinky3[0], palm_base[1] - pinky3[1], palm_base[2] - pinky3[2]]
+          const thumb0_value = [palm_base[0] - thumb0[0], palm_base[1] - thumb0[1], palm_base[2] - thumb0[2]]
+          const thumb1_value = [palm_base[0] - thumb1[0], palm_base[1] - thumb1[1], palm_base[2] - thumb1[2]]
+          const thumb2_value = [palm_base[0] - thumb2[0], palm_base[1] - thumb2[1], palm_base[2] - thumb2[2]]
+          const thumb3_value = [palm_base[0] - thumb3[0], palm_base[1] - thumb3[1], palm_base[2] - thumb3[2]]
+
+          const index0_euclidean = Math.sqrt(Math.pow(index0_value[0], 2) + Math.pow(index0_value[1], 2) + Math.pow(index0_value[2], 2))
+          const index1_euclidean = Math.sqrt(Math.pow(index1_value[0], 2) + Math.pow(index1_value[1], 2) + Math.pow(index1_value[2], 2))
+          const index2_euclidean = Math.sqrt(Math.pow(index2_value[0], 2) + Math.pow(index2_value[1], 2) + Math.pow(index2_value[2], 2))
+          const index3_euclidean = Math.sqrt(Math.pow(index3_value[0], 2) + Math.pow(index3_value[1], 2) + Math.pow(index3_value[2], 2))
+          const middle0_euclidean = Math.sqrt(Math.pow(middle0_value[0], 2) + Math.pow(middle0_value[1], 2) + Math.pow(middle0_value[2], 2))
+          const middle1_euclidean = Math.sqrt(Math.pow(middle1_value[0], 2) + Math.pow(middle1_value[1], 2) + Math.pow(middle1_value[2], 2))
+          const middle2_euclidean = Math.sqrt(Math.pow(middle2_value[0], 2) + Math.pow(middle2_value[1], 2) + Math.pow(middle2_value[2], 2))
+          const middle3_euclidean = Math.sqrt(Math.pow(middle3_value[0], 2) + Math.pow(middle3_value[1], 2) + Math.pow(middle3_value[2], 2))
+          const ring0_euclidean = Math.sqrt(Math.pow(ring0_value[0], 2) + Math.pow(ring0_value[1], 2) + Math.pow(ring0_value[2], 2))
+          const ring1_euclidean = Math.sqrt(Math.pow(ring1_value[0], 2) + Math.pow(ring1_value[1], 2) + Math.pow(ring1_value[2], 2))
+          const ring2_euclidean = Math.sqrt(Math.pow(ring2_value[0], 2) + Math.pow(ring2_value[1], 2) + Math.pow(ring2_value[2], 2))
+          const ring3_euclidean = Math.sqrt(Math.pow(ring3_value[0], 2) + Math.pow(ring3_value[1], 2) + Math.pow(ring3_value[2], 2))
+          const pinky0_euclidean = Math.sqrt(Math.pow(pinky0_value[0], 2) + Math.pow(pinky0_value[1], 2) + Math.pow(pinky0_value[2], 2))
+          const pinky1_euclidean = Math.sqrt(Math.pow(pinky1_value[0], 2) + Math.pow(pinky1_value[1], 2) + Math.pow(pinky1_value[2], 2))
+          const pinky2_euclidean = Math.sqrt(Math.pow(pinky2_value[0], 2) + Math.pow(pinky2_value[1], 2) + Math.pow(pinky2_value[2], 2))
+          const pinky3_euclidean = Math.sqrt(Math.pow(pinky3_value[0], 2) + Math.pow(pinky3_value[1], 2) + Math.pow(pinky3_value[2], 2))
+          const thumb0_euclidean = Math.sqrt(Math.pow(thumb0_value[0], 2) + Math.pow(thumb0_value[1], 2) + Math.pow(thumb0_value[2], 2))
+          const thumb1_euclidean = Math.sqrt(Math.pow(thumb1_value[0], 2) + Math.pow(thumb1_value[1], 2) + Math.pow(thumb1_value[2], 2))
+          const thumb2_euclidean = Math.sqrt(Math.pow(thumb2_value[0], 2) + Math.pow(thumb2_value[1], 2) + Math.pow(thumb2_value[2], 2))
+          const thumb3_euclidean = Math.sqrt(Math.pow(thumb3_value[0], 2) + Math.pow(thumb3_value[1], 2) + Math.pow(thumb3_value[2], 2))
+
+          euclidean_score += index0_euclidean + index1_euclidean + index2_euclidean + index3_euclidean + middle0_euclidean + middle1_euclidean + middle2_euclidean +middle3_euclidean + ring0_euclidean
+          euclidean_score += ring1_euclidean + ring2_euclidean + ring3_euclidean + pinky0_euclidean + pinky1_euclidean + pinky2_euclidean + pinky3_euclidean + thumb0_euclidean + thumb1_euclidean
+          euclidean_score += thumb2_euclidean + thumb3_euclidean
+
+          euclidean_score /= 20
+
+          const euclidean_sim_score = 1/(1+euclidean_score)
+
+          console.log(euclidean_sim_score);
+          document.getElementById("euclidean_sim").innerHTML = euclidean_sim_score;
         }
         const ctx = this.canvasRef.current.getContext("2d");
         drawHand(hand, ctx);
@@ -269,7 +368,8 @@ class App extends Component {
             test
             </Button>
             <label id="test_id"> </label>
-            <p>{this.state.test}</p>
+            <label>Euclidean Similarity Score: </label>
+            <label id="euclidean_sim"></label>
             <Button
             onClick={()=> this.setState({test:this.state.test + 1})}> Click </Button>
             <ButtonViewer
